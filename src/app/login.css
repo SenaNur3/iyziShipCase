@@ -1,0 +1,31 @@
+.ant-input-password {
+    border-color: #007FFF !important;
+    height: 44px;
+    width: 360px;
+    border-radius: 10px;
+}
+
+.ant-input {
+    border-color: #007FFF !important;
+    height: 44px;
+    width: 360px;
+    border-radius: 10px;
+}
+.ant-input-affix-wrapper >input.ant-input {
+    height: 35px;
+}
+.ant-input:hover {
+    z-index: 0;
+}
+.ant-input:focus {
+    z-index: 0;
+}
+.ant-input-password:hover {
+    z-index: 0 !important;   
+}
+.ant-input-password:focus {
+    z-index: 0;
+}
+.ant-input-password:focus-visible {
+    z-index: 0;
+}
