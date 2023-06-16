@@ -8,14 +8,13 @@ import ToggleButton from "../components/toggle-button"
 const toggleData = [{
     isActive: true,
     buttonName:"Giriş Yap",
-    url:""
+    url:"login"
 },
 {
     isActive: false,
     buttonName:"Kayıt Ol",
-    url:""
+    url:"register"
 }
-
 ]
 
 const Container = styled(motion.div)`
@@ -44,6 +43,11 @@ background-color: #fff;
 color: #007FFF;
 z-index: 1;
 `;
+const Flex = styled(motion.div)`
+display:flex;
+flex-direction:column;
+width:100%;
+`;
 const LoginButton = styled(motion.div)`
   display: flex;
   align-items: center;
@@ -53,7 +57,7 @@ const LoginButton = styled(motion.div)`
   background: #007fff;
   border-radius: 10px;
   height: 43px;
-  width: 360px;
+  width: 100%;
   font-family: Inter;
   font-size: 14px;
   font-weight: 700;
@@ -67,10 +71,10 @@ const Login = () => (
     <Form
       name="basic"
       labelCol={{
-        span: 8,
+        span: 24,
       }}
       wrapperCol={{
-        span: 16,
+        span: 24,
       }}
       style={{
         maxWidth: 600,
@@ -80,8 +84,10 @@ const Login = () => (
       }}
       autoComplete="off"
     >
+      <Flex>
       <Form.Item
-        name="username"
+        name="E-posta"
+        className="mn-w"
         rules={[
           {
             required: true,
@@ -97,6 +103,8 @@ const Login = () => (
 
       <Form.Item
         name="password"
+        className="mn-w"
+
         rules={[
           {
             required: true,
@@ -107,7 +115,7 @@ const Login = () => (
         <Label>Şifre</Label>
         <Input.Password placeholder="••••••••" />
       </Form.Item>
-
+      </Flex>
       <Form.Item
        
       >

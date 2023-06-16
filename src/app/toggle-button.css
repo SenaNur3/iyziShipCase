@@ -2,3 +2,10 @@
     background: #007FFF;
     color: #FFF !important;
 }
+.toggle{
+    background:  #FFF ;
+    color: #007FFF!important;
+}
+a{
+    text-decoration: none !important;
+  }

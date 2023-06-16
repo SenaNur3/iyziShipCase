@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import "../app/toggle-button.css";
+import Link from "next/link";
 
 const Container = styled(motion.div)`
   display: flex;
@@ -33,27 +34,20 @@ const ToggleBtn = styled(motion.div)`
   cursor: pointer;
   margin: 5px;
 `;
-const ToglleButton = ({ buttonData }) => {
+const ToggleButton = ({ buttonData }) => {
   const [data, setData] = useState(buttonData);
-  const handleOnClick = (value) => {
-  
-    buttonData.map((item)=> {item.isActive = false})
-    buttonData.map((item)=> {if(item.buttonName==value.buttonName){
-        item.isActive=true
-    }})
-    value.isActive = true 
-    setData(buttonData)
-    console.log(data)
-  };
+
   return (
     <Container>
       {data?.map((item) => (
-        <ToggleBtn className={item.isActive ? "active-toggle " : "" } onClick={()=>handleOnClick(item)}>
-          {item.buttonName}
-        </ToggleBtn>
+        <Link key={item.url} href={item.url}>
+          <ToggleBtn className={item.isActive ? "active-toggle" : "toggle"}>
+            {item.buttonName}
+          </ToggleBtn>
+        </Link>
       ))}
     </Container>
   );
 };
 
-export default ToglleButton;
+export default ToggleButton;

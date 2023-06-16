@@ -29,6 +29,9 @@
 .ant-input-password:focus-visible {
     z-index: 0;
 }
-.mn-w{
-    min-width: 360px;
+.ml-5{
+    margin-left:5px;
+}
+.mr-5{
+    margin-right:5px
 }
