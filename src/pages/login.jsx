@@ -49,7 +49,7 @@ const Flex = styled(motion.div)`
   flex-direction: column;
   width: 100%;
 `;
-const LoginButton = styled(motion.div)`
+const ButtonLogin = styled(motion.Button)`
   display: flex;
   align-items: center;
   text-align: center;
@@ -64,6 +64,7 @@ const LoginButton = styled(motion.div)`
   font-weight: 700;
   line-height: 21px;
   letter-spacing: 0.02em;
+  border-color: transparent;
 `;
 
 const onFinish = (values) => {
@@ -144,9 +145,9 @@ const Login = () => {
         </Form.Item>
       </Flex>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <ButtonLogin type="primary" htmlType="submit">
           Giriş Yap
-        </Button>
+        </ButtonLogin>
       </Form.Item>
     </Form>
   </Container>

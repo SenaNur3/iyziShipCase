@@ -100,11 +100,9 @@ margin-top:300px;
 
 `;
 const Sidebar = (props) => {
- console.log(props)
  const router = useRouter();
 
   const onClick = (e) => {
-    console.log("click ", e);
   };
 
   const logOut = () => {

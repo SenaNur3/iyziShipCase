@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Checkbox, Form, Input } from "antd";
@@ -50,6 +50,8 @@ const BoxResult = styled(motion.div)`
 const AdresListCard = ({data}) => {
   
   useEffect(() => {
+    const apiUrl = "https://api.iyziship.com/address/list";
+
     fetch(apiUrl, {
       method: "GET",
       headers: {
@@ -63,9 +65,6 @@ const AdresListCard = ({data}) => {
       })
       .catch((error) => {
         console.log("Bir hata oluştu:", error);
-        router.push({
-          pathname: "/login",
-        });
       });
 
   }, []);

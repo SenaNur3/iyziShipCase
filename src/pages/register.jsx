@@ -29,6 +29,9 @@ const Container = styled(motion.div)`
 const PassContainer = styled(motion.div)`
   position: relative;
 `;
+const MainPass = styled(motion.div)`
+  display: flex;
+`;
 
 const FormElement = styled(motion.div)`
   position: relative;
@@ -52,7 +55,7 @@ const Label = styled(motion.div)`
   color: #007fff;
   z-index: 1;
 `;
-const LoginButton = styled(motion.div)`
+const ButtonLogin = styled(motion.Button)`
   display: flex;
   align-items: center;
   text-align: center;
@@ -60,6 +63,7 @@ const LoginButton = styled(motion.div)`
   color: #fff;
   background: #007fff;
   border-radius: 10px;
+  border-color: transparent;
   height: 43px;
   width: 100%;
   font-family: Inter;
@@ -67,6 +71,7 @@ const LoginButton = styled(motion.div)`
   font-weight: 700;
   line-height: 21px;
   letter-spacing: 0.02em;
+  cursor: pointer;
 `;
 const Register = () => {
   const [form] = Form.useForm();
@@ -77,7 +82,7 @@ const Register = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "task": "enable"
+        task: "enable",
       },
       body: JSON.stringify(values),
     })
@@ -162,63 +167,67 @@ const Register = () => {
           </FormElement>
         </Form.Item>
 
-        <PassContainer>
-          <Label>Şifre</Label>
+        <MainPass>
+          <PassContainer>
+            <Label>Şifre</Label>
 
-          <Form.Item
-            name="password"
-            className="mr-5"
-            style={{
-              width: "100%",
-            }}
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}
-            hasFeedback
-          >
-            <Input.Password />
-          </Form.Item>
-        </PassContainer>
-
-        <PassContainer>
-          <Label>Şifre Tekrarı</Label>
-
-          <Form.Item
-            name="password_confirmation"
-            className="ml-5"
-            style={{
-              width: "100%",
-            }}
-            dependencies={["password"]}
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: "Please confirm your password!",
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("The new password that you entered do not match!")
-                  );
+            <Form.Item
+              name="password"
+              className="mr-5"
+              style={{
+                width: "100%",
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
                 },
-              }),
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-        </PassContainer>
+              ]}
+              hasFeedback
+            >
+              <Input.Password />
+            </Form.Item>
+          </PassContainer>
+
+          <PassContainer>
+            <Label>Şifre Tekrarı</Label>
+
+            <Form.Item
+              name="password_confirmation"
+              className="ml-5"
+              style={{
+                width: "100%",
+              }}
+              dependencies={["password"]}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: "Please confirm your password!",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          </PassContainer>
+        </MainPass>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <ButtonLogin type="primary" htmlType="submit">
             Kayıt Ol
-          </Button>
+          </ButtonLogin>
         </Form.Item>
       </Form>
     </Container>
