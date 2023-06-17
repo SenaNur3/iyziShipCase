@@ -1,0 +1,11 @@
+.ant-menu-light .ant-menu-item-selected {
+    background-color: #fff !important;
+}
+
+.top-2 {
+    top: 274px !important;
+}
+
+.ant-menu-inline {
+    border-inline-end: none !important;
+}

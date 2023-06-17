@@ -1,0 +1,14 @@
+.flex-end{
+    display: flex;
+    justify-content: flex-end;
+}
+.mr{
+    margin-right: 70px;
+}
+
+.wide{
+    width: 100% !important;
+    height: 50px !important;
+    margin-right: 31px;
+}
+
