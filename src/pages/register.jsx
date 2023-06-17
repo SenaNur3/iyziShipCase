@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Checkbox, Form, Input } from "antd";
+import { Form, Input, Button } from "antd";
 import "../app/register.css";
 import ToggleButton from "../components/toggle-button";
 
@@ -24,6 +24,10 @@ const Container = styled(motion.div)`
   justify-content: center;
   align-items: center;
   height: 500px;
+`;
+
+const PassContainer = styled(motion.div)`
+  position: relative;
 `;
 
 const FormElement = styled(motion.div)`
@@ -64,119 +68,161 @@ const LoginButton = styled(motion.div)`
   line-height: 21px;
   letter-spacing: 0.02em;
 `;
-const Register = () => (
-  <Container>
-    <Icon></Icon>
-    <ToggleButton buttonData={toggleData} />
-    <Form
-      name="basic"
-      wrapperCol={{
-        span: 24,
-      }}
-      style={{
-        maxWidth: 600,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      autoComplete="off"
-    >
-      <Row>
+const Register = () => {
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    const apiUrl = "https://api.iyziship.com/task/register";
+
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "task": "enable"
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log("Bir hata oluştu:", error);
+      });
+  };
+
+  return (
+    <Container>
+      <Icon></Icon>
+      <ToggleButton buttonData={toggleData} />
+      <Form
+        name="basic"
+        wrapperCol={{
+          span: 24,
+        }}
+        style={{
+          maxWidth: 600,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        form={form}
+        onFinish={onFinish}
+      >
+        <Row>
+          <Form.Item
+            name="name"
+            className="mr-5"
+            style={{
+              width: "100%",
+            }}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <FormElement>
+              <Label>Adınız</Label>
+              <Input className="input-row" />
+            </FormElement>
+          </Form.Item>
+          <Form.Item
+            name="surname"
+            className="ml-5"
+            style={{
+              width: "100%",
+            }}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <FormElement>
+              <Label>Soyadınız</Label>
+              <Input />
+            </FormElement>
+          </Form.Item>
+        </Row>
         <Form.Item
-          name="name"
-          className="mr-5"
+          name="email"
           style={{
             width: "100%",
           }}
           rules={[
             {
               required: true,
-              message: "Please input your username!",
+              type: "email",
             },
           ]}
         >
           <FormElement>
-            <Label>Adınız</Label>
-            <Input className="input-row" />
-          </FormElement>
-        </Form.Item>
-        <Form.Item
-          name="surname"
-          className="ml-5"
-          style={{
-            width: "100%",
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <FormElement>
-            <Label>Soyadınız</Label>
+            <Label>E-Posta Adresiniz</Label>
             <Input />
           </FormElement>
         </Form.Item>
-      </Row>
-      <Form.Item
-        name="E-posta"
-        style={{
-          width: "100%",
-        }}
-        rules={[
-          {
-            required: true,
-            message: "Please input your username!",
-          },
-        ]}
-      >
-        <FormElement>
-          <Label>E-Posta Adresiniz</Label>
-          <Input />
-        </FormElement>
-      </Form.Item>
-      <Row>
-        <Form.Item
-          name="password"
-          className="mr-5"
 
-          style={{
-            width: "100%",
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
+        <PassContainer>
           <Label>Şifre</Label>
-          <Input.Password />
-        </Form.Item>
-        <Form.Item
-          name="password-confirm"
-          className="ml-5"
 
-          style={{
-            width: "100%",
-          }}
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
+          <Form.Item
+            name="password"
+            className="mr-5"
+            style={{
+              width: "100%",
+            }}
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password />
+          </Form.Item>
+        </PassContainer>
+
+        <PassContainer>
           <Label>Şifre Tekrarı</Label>
-          <Input.Password />
+
+          <Form.Item
+            name="password_confirmation"
+            className="ml-5"
+            style={{
+              width: "100%",
+            }}
+            dependencies={["password"]}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: "Please confirm your password!",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("The new password that you entered do not match!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+        </PassContainer>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Kayıt Ol
+          </Button>
         </Form.Item>
-      </Row>
-      <Form.Item>
-        <LoginButton>Kayıt Ol</LoginButton>
-      </Form.Item>
-    </Form>
-  </Container>
-);
+      </Form>
+    </Container>
+  );
+};
 
 export default Register;

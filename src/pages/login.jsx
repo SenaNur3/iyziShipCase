@@ -1,52 +1,53 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Checkbox, Form, Input } from "antd";
-import "../app/login.css"
-import ToggleButton from "../components/toggle-button"
+import { Form, Input, Button } from "antd";
+import "../app/login.css";
+import ToggleButton from "../components/toggle-button";
 
-const toggleData = [{
+const toggleData = [
+  {
     isActive: true,
-    buttonName:"Giriş Yap",
-    url:"login"
-},
-{
+    buttonName: "Giriş Yap",
+    url: "login",
+  },
+  {
     isActive: false,
-    buttonName:"Kayıt Ol",
-    url:"register"
-}
-]
+    buttonName: "Kayıt Ol",
+    url: "register",
+  },
+];
 
 const Container = styled(motion.div)`
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 500px;
 `;
 
 const FormElement = styled(motion.div)`
- position: relative;
+  position: relative;
 `;
 const Icon = styled(motion.div)`
- background-image: url("/images/iconIyiziShip.png");
- background-repeat: no-repeat;
- height: 88px;
- width: 248px;
- margin-bottom:36px;
+  background-image: url("/images/iconIyiziShip.png");
+  background-repeat: no-repeat;
+  height: 88px;
+  width: 248px;
+  margin-bottom: 36px;
 `;
 const Label = styled(motion.div)`
-position: absolute;
-left: 13px;
-top: -13px;
-background-color: #fff;
-color: #007FFF;
-z-index: 1;
+  position: absolute;
+  left: 13px;
+  top: -13px;
+  background-color: #fff;
+  color: #007fff;
+  z-index: 1;
 `;
 const Flex = styled(motion.div)`
-display:flex;
-flex-direction:column;
-width:100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 const LoginButton = styled(motion.div)`
   display: flex;
@@ -64,12 +65,37 @@ const LoginButton = styled(motion.div)`
   line-height: 21px;
   letter-spacing: 0.02em;
 `;
-const Login = () => (
+
+const onFinish = (values) => {
+  const apiUrl = "https://api.iyziship.com/task/login";
+
+  fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      task: "enable",
+    },
+    body: JSON.stringify(values),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log("Bir hata oluştu:", error);
+    });
+};
+
+
+const Login = () => {
+  const [form] = Form.useForm();
+
+  return (
   <Container>
-    <Icon ></Icon>
-    <ToggleButton buttonData={toggleData}/>
+    <Icon></Icon>
+    <ToggleButton buttonData={toggleData} />
     <Form
-      name="basic"
+      name="login"
       labelCol={{
         span: 24,
       }}
@@ -83,48 +109,49 @@ const Login = () => (
         remember: true,
       }}
       autoComplete="off"
+      form={form}
+      onFinish={onFinish}
     >
       <Flex>
-      <Form.Item
-        name="E-posta"
-        className="mn-w"
-        rules={[
-          {
-            required: true,
-            message: "Please input your username!",
-          },
-        ]}
-      >
-        <FormElement>
-        <Label>E-Posta</Label>
-        <Input placeholder="batuhan.kirma@iyziship.com" />
-        </FormElement>
-      </Form.Item>
+        <Form.Item
+          name="E-posta"
+          className="mn-w"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <FormElement>
+            <Label>E-Posta</Label>
+            <Input placeholder="batuhan.kirma@iyziship.com" />
+          </FormElement>
+        </Form.Item>
 
-      <Form.Item
-        name="password"
-        className="mn-w"
-
-        rules={[
-          {
-            required: true,
-            message: "Please input your password!",
-          },
-        ]}
-      >
-        <Label>Şifre</Label>
-        <Input.Password placeholder="••••••••" />
-      </Form.Item>
+        <Form.Item
+          name="password"
+          className="mn-w"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Label>Şifre</Label>
+          <Input.Password placeholder="••••••••" />
+        </Form.Item>
       </Flex>
-      <Form.Item
-       
-      >
-        <LoginButton>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
           Giriş Yap
-        </LoginButton>
+        </Button>
       </Form.Item>
     </Form>
   </Container>
-);
+  );
+};
+
 
 export default Login;

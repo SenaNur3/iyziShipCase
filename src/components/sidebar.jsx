@@ -11,6 +11,7 @@ import {
   LeftOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
+import { useRouter } from 'next/router'
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -96,12 +97,39 @@ line-height: 20px;
 letter-spacing: 0px;
 text-align: left;
 margin-top:300px;
+
 `;
 const Sidebar = (props) => {
  console.log(props)
+ const router = useRouter();
 
   const onClick = (e) => {
     console.log("click ", e);
+  };
+
+  const logOut = () => {
+  const apiUrl = "https://api.iyziship.com/task/logout";
+
+  fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      task: "enable",
+    }
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      router.push({
+        pathname: '/login',
+      })
+    })
+    .catch((error) => {
+      console.log("Bir hata oluştu:", error);
+      router.push({
+        pathname: '/login',
+      })
+    });
   };
   
   return (
@@ -124,7 +152,10 @@ const Sidebar = (props) => {
         items={items}
       ></Menu>
       <Down>
-      <LogoutOutlined style={{marginRight: "19px",fontSize:"15px" }}/> Çıkış
+        <div onClick={logOut} style={{color:"#7C7C7A", cursor: "pointer"}}>
+        <LogoutOutlined style={{marginRight: "19px",fontSize:"15px",color:"#7C7C7A" }}/> Çıkış
+        </div>
+     
       </Down>
    
     </Container>
