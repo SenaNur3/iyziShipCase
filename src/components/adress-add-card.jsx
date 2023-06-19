@@ -130,7 +130,8 @@ const AdresAdd = () => {
             <FormElement>
               <Label>Adres Başlığı</Label>
               <Input
-                defaultValue="Adres Başlığı"
+                            rules={[{ required: true, min: 6 }]}
+
                 placeholder="Adınız Soyadınız"
               />
             </FormElement>
@@ -149,8 +150,9 @@ const AdresAdd = () => {
               <FormElement>
                 <Label>Adres Satırı 1</Label>
                 <Input
-                  defaultValue="Adres line"
                   style={{ width: "100%" }}
+                  rules={[{ required: true, min: 6 }]}
+
                   className="wide"
                   placeholder="Adresiniz"
                 />
@@ -161,6 +163,8 @@ const AdresAdd = () => {
             <Form.Item
               name="country"
               className="mn-w"
+              rules={[{ required: true, max: 2 }]}
+
               style={{
                 width: "44%",
                 marginLeft: "20px",
@@ -169,7 +173,7 @@ const AdresAdd = () => {
             >
               <FormElement>
                 <Label>Ülke 1</Label>
-                <Input defaultValue="TR" placeholder="Turkey" />
+                <Input placeholder="Turkey" />
               </FormElement>
             </Form.Item>
           </Row>
@@ -177,6 +181,7 @@ const AdresAdd = () => {
             <Form.Item
               name="town"
               className="mr"
+              rules={[{ required: true }]}
               style={{
                 width: "100%",
                 marginLeft: "20px",
@@ -185,7 +190,6 @@ const AdresAdd = () => {
               <FormElement>
                 <Label>Semt/Eyalet</Label>
                 <Input
-                  defaultValue="Town"
                   className="input-row"
                   placeholder="Semt/Eyalet"
                 />
@@ -193,15 +197,16 @@ const AdresAdd = () => {
             </Form.Item>
 
             <Form.Item
-              name="postal_code"
+              name="state"
               className="mr"
+              rules={[{ required: true }]}
               style={{
                 width: "100%",
               }}
             >
               <FormElement>
                 <Label>İlçe</Label>
-                <Input defaultValue="34200" placeholder="İlçe" />
+                <Input  />
               </FormElement>
             </Form.Item>
 
@@ -210,6 +215,8 @@ const AdresAdd = () => {
             <Form.Item
               name="city"
               className=""
+              rules={[{ required: true }]}
+
               style={{
                 width: "100%",
                 marginRight: "35px",
@@ -217,21 +224,22 @@ const AdresAdd = () => {
             >
               <FormElement>
                 <Label>Şehir</Label>
-                <Input defaultValue="City" placeholder="Şehir" />
+                <Input placeholder="Şehir" />
               </FormElement>
             </Form.Item>
 
             <Form.Item
-              name="state"
+              name="postal_code"
               className=""
+
               style={{
                 width: "100%",
                 marginRight: "35px",
               }}
             >
               <FormElement>
-                <Label>State</Label>
-                <Input defaultValue="state" placeholder="state" />
+                <Label>Posta Kodu</Label>
+                <Input placeholder="Posta Kodu" />
               </FormElement>
             </Form.Item>
           </Row>
