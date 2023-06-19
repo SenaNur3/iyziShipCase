@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Form, Input, Button } from "antd";
 import "../app/login.css";
 import ToggleButton from "../components/toggle-button";
+import { useRouter } from "next/router";
 
 const toggleData = [
   {
@@ -67,92 +68,98 @@ const ButtonLogin = styled(motion.Button)`
   border-color: transparent;
 `;
 
-const onFinish = (values) => {
-  const apiUrl = "https://api.iyziship.com/task/login";
-
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      task: "enable",
-    },
-    body: JSON.stringify(values),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log("Bir hata oluştu:", error);
-    });
-};
-
-
 const Login = () => {
   const [form] = Form.useForm();
+  const router = useRouter();
+
+  const onFinish = (values) => {
+    const apiUrl = "https://api.iyziship.com/task/login";
+
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        task: "enable",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        if (data?.access_token) {
+          localStorage.setItem("user_information", JSON.stringify(data));
+          router.push({
+            pathname: "/adress-list",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("Bir hata oluştu:", error);
+      });
+  };
 
   return (
-  <Container>
-    <Icon></Icon>
-    <ToggleButton buttonData={toggleData} />
-    <Form
-      name="login"
-      labelCol={{
-        span: 24,
-      }}
-      wrapperCol={{
-        span: 24,
-      }}
-      style={{
-        maxWidth: 600,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      autoComplete="off"
-      form={form}
-      onFinish={onFinish}
-    >
-      <Flex>
-        <Form.Item
-          name="E-posta"
-          className="mn-w"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <FormElement>
-            <Label>E-Posta</Label>
-            <Input placeholder="batuhan.kirma@iyziship.com" />
-          </FormElement>
-        </Form.Item>
+    <Container>
+      <Icon></Icon>
+      <ToggleButton buttonData={toggleData} />
+      <Form
+        name="login"
+        labelCol={{
+          span: 24,
+        }}
+        wrapperCol={{
+          span: 24,
+        }}
+        style={{
+          maxWidth: 600,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        autoComplete="off"
+        form={form}
+        onFinish={onFinish}
+      >
+        <Flex>
+          <Label>E-Posta</Label>
+          <Form.Item
+            name="email"
+            className="mn-w"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <FormElement>
+              <Input placeholder="batuhan.kirma@iyziship.com" />
+            </FormElement>
+          </Form.Item>
 
-        <Form.Item
-          name="password"
-          className="mn-w"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
           <Label>Şifre</Label>
-          <Input.Password placeholder="••••••••" />
+          <Form.Item
+            name="password"
+            className="mn-w"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="••••••••" />
+          </Form.Item>
+        </Flex>
+        <Form.Item>
+          <ButtonLogin type="primary" htmlType="submit">
+            Giriş Yap
+          </ButtonLogin>
         </Form.Item>
-      </Flex>
-      <Form.Item>
-        <ButtonLogin type="primary" htmlType="submit">
-          Giriş Yap
-        </ButtonLogin>
-      </Form.Item>
-    </Form>
-  </Container>
+      </Form>
+    </Container>
   );
 };
-
 
 export default Login;

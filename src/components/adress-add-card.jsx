@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Form, Input } from "antd";
 import "../app/login.css";
 import "../app/address-add-card.css";
 import { CheckOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const Container = styled(motion.div)`
   display: flex;
@@ -35,7 +36,7 @@ const Flex = styled(motion.div)`
   flex-direction: column;
   width: 100%;
 `;
-const RecordButton = styled(motion.div)`
+const RecordButton = styled(motion.button)`
   display: flex;
   align-items: center;
   text-align: center;
@@ -58,26 +59,42 @@ const Row = styled(motion.div)`
 
 const AdresAdd = () => {
   const [form] = Form.useForm();
+  const [myToken, setToken] = useState([]);
 
-  const add = () => {
-    const apiUrl = "https://api.iyziship.com/address/add";
+  const router = useRouter();
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("user_information"));
+    if (items) {
+      console.log("here");
+      setToken(items.access_token);
+      console.log("items", myToken);
+    } else {
+      router.push({
+        pathname: "/login",
+      });
+    }
+  }, []);
+
+  const add = (values) => {
+    const apiUrl = "https://api.iyziship.com/task/address/add";
 
     fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         task: "enable",
+        'Authorization': `Bearer ${myToken}`,
       },
+      body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+
       })
       .catch((error) => {
         console.log("Bir hata oluştu:", error);
-        router.push({
-          pathname: "/login",
-        });
       });
   };
 
@@ -91,7 +108,7 @@ const AdresAdd = () => {
         wrapperCol={{
           span: 24,
         }}
-        initialValues={{
+        defaultValue={{
           remember: true,
         }}
         autoComplete="off"
@@ -100,7 +117,7 @@ const AdresAdd = () => {
       >
         <Flex>
           <Form.Item
-            name="title"
+            name="address_description"
             className="mn-w"
             style={{
               width: "50%",
@@ -109,28 +126,19 @@ const AdresAdd = () => {
               marginTop: "68px",
               marginBottom: "40px",
             }}
-            rules={[
-              {
-                required: true,
-                message: "Please input your username!",
-              },
-            ]}
           >
             <FormElement>
               <Label>Adres Başlığı</Label>
-              <Input placeholder="Adınız Soyadınız" />
+              <Input
+                defaultValue="Adres Başlığı"
+                placeholder="Adınız Soyadınız"
+              />
             </FormElement>
           </Form.Item>
 
           <Flex>
             <Form.Item
-              name="line-1"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-              ]}
+              name="address1"
               style={{
                 marginBottom: "40px",
                 width: "95%",
@@ -138,12 +146,15 @@ const AdresAdd = () => {
                 marginLeft: "20px",
               }}
             >
-              <Label>Adres Satırı 1</Label>
-              <Input
-                style={{ width: "100%" }}
-                className="wide"
-                placeholder="Adresiniz"
-              />
+              <FormElement>
+                <Label>Adres Satırı 1</Label>
+                <Input
+                  defaultValue="Adres line"
+                  style={{ width: "100%" }}
+                  className="wide"
+                  placeholder="Adresiniz"
+                />
+              </FormElement>
             </Form.Item>
           </Flex>
           <Row>
@@ -155,32 +166,11 @@ const AdresAdd = () => {
                 marginLeft: "20px",
                 marginBottom: "40px",
               }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-              ]}
             >
-              <Label>Ülke 1</Label>
-              <Input placeholder="Turkey" />
-            </Form.Item>
-            <Form.Item
-              name="country"
-              className="mn-w"
-              style={{
-                width: "44.50%",
-                marginLeft: "70px",
-              }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-              ]}
-            >
-              <Label>Posta Kodu</Label>
-              <Input placeholder="Posta Kodunuz" />
+              <FormElement>
+                <Label>Ülke 1</Label>
+                <Input defaultValue="TR" placeholder="Turkey" />
+              </FormElement>
             </Form.Item>
           </Row>
           <Row>
@@ -191,36 +181,32 @@ const AdresAdd = () => {
                 width: "100%",
                 marginLeft: "20px",
               }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
             >
               <FormElement>
                 <Label>Semt/Eyalet</Label>
-                <Input className="input-row" placeholder="Semt/Eyalet" />
+                <Input
+                  defaultValue="Town"
+                  className="input-row"
+                  placeholder="Semt/Eyalet"
+                />
               </FormElement>
             </Form.Item>
+
             <Form.Item
-              name="neighborhood"
+              name="postal_code"
               className="mr"
               style={{
                 width: "100%",
               }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
             >
               <FormElement>
                 <Label>İlçe</Label>
-                <Input placeholder="İlçe" />
+                <Input defaultValue="34200" placeholder="İlçe" />
               </FormElement>
             </Form.Item>
+
+
+
             <Form.Item
               name="city"
               className=""
@@ -228,16 +214,24 @@ const AdresAdd = () => {
                 width: "100%",
                 marginRight: "35px",
               }}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
             >
               <FormElement>
                 <Label>Şehir</Label>
-                <Input placeholder="Şehir" />
+                <Input defaultValue="City" placeholder="Şehir" />
+              </FormElement>
+            </Form.Item>
+
+            <Form.Item
+              name="state"
+              className=""
+              style={{
+                width: "100%",
+                marginRight: "35px",
+              }}
+            >
+              <FormElement>
+                <Label>State</Label>
+                <Input defaultValue="state" placeholder="state" />
               </FormElement>
             </Form.Item>
           </Row>
@@ -246,7 +240,7 @@ const AdresAdd = () => {
           className="flex-end"
           style={{ marginRight: "33px", marginTop: "40px" }}
         >
-          <RecordButton>
+          <RecordButton type="primary" htmlType="submit">
             <CheckOutlined style={{ marginRight: "12px" }} />
             Kaydet
           </RecordButton>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Form, Input, Button } from "antd";
 import "../app/register.css";
 import ToggleButton from "../components/toggle-button";
+import { useRouter } from 'next/router'
 
 const toggleData = [
   {
@@ -75,6 +76,8 @@ const ButtonLogin = styled(motion.Button)`
 `;
 const Register = () => {
   const [form] = Form.useForm();
+  const router = useRouter();
+
   const onFinish = (values) => {
     const apiUrl = "https://api.iyziship.com/task/register";
 
@@ -88,7 +91,15 @@ const Register = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("if öncesi: ",data);
+        if(data?.errors) {
+          alert(data.errors.password)
+        }
+        else {
+          router.push({
+            pathname: "/login",
+          });
+        }
       })
       .catch((error) => {
         console.log("Bir hata oluştu:", error);

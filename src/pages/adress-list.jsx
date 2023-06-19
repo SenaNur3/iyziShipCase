@@ -26,61 +26,14 @@ const CardBoxes = styled(motion.div)`
   margin-top: 30px;
 `;
 
-const all = [
-  {
-    list: [
-      { title: "Başlık", result: "Ev", canCopy: false },
-      {
-        title: "Adres",
-        result:
-          "15 Temmuz Mah.Güneşli, 15 Temmuz Mah. Koçman Cd. Demirkol Plaza 54E",
-        canCopy: true,
-      },
-      { title: "Posta Kodu", result: "34212", canCopy: true },
-      { title: "Semt", result: "Bağcılar", canCopy: true },
-      { title: "Şehir", result: "İstanbul", canCopy: true },
-    ],
-  },
-  {
-    list: [
-      { title: "Başlık", result: "Ev", canCopy: false },
-      {
-        title: "Adres",
-        result:
-          "15 Temmuz Mah.Güneşli, 15 Temmuz Mah. Koçman Cd. Demirkol Plaza 54E",
-        canCopy: true,
-      },
-      { title: "Posta Kodu", result: "34212", canCopy: true },
-      { title: "Semt", result: "Bağcılar", canCopy: true },
-      { title: "Şehir", result: "İstanbul", canCopy: true },
-    ],
-  },
-  {
-    list: [
-      { title: "Başlık", result: "Ev", canCopy: false },
-      {
-        title: "Adres",
-        result:
-          "15 Temmuz Mah.Güneşli, 15 Temmuz Mah. Koçman Cd. Demirkol Plaza 54E",
-        canCopy: true,
-      },
-      { title: "Posta Kodu", result: "34212", canCopy: true },
-      { title: "Semt", result: "Bağcılar", canCopy: true },
-      { title: "Şehir", result: "İstanbul", canCopy: true },
-    ],
-  }
-];
-
 const AdressList = () => {
   return (
     <Main>
       <Sidebar select={"2"} />
       <Container>
-      {all?.map((item, index) => (
         <CardBoxes>
-            <AdresListCard key={index} data={item?.list} />
+            <AdresListCard />
         </CardBoxes>
-         ))}
       </Container>
     </Main>
   );

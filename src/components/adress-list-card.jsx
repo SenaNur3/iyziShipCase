@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Checkbox, Form, Input } from "antd";
+import { Checkbox, Form, message } from "antd";
 import "../app/login.css";
 import "../app/address-add-card.css";
 import { CopyOutlined } from "@ant-design/icons";
-
+import { useRouter } from "next/router";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const BorderedCard = styled(motion.div)`
   display: flex;
@@ -16,9 +17,13 @@ const BorderedCard = styled(motion.div)`
   border-radius: 10px;
 `;
 
-const BoxItems = styled(motion.div)`
+const Item = styled(motion.div)`
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
+`;
+
+const BoxItems = styled(motion.div)`
   margin-left: 15px;
   margin-right: 15px;
   margin-top: 15px;
@@ -45,44 +50,102 @@ const BoxResult = styled(motion.div)`
   height: 100%;
 `;
 
+const AdresListCard = () => {
+  const router = useRouter();
+  const [myToken, setToken] = useState([]);
+  const [list, setList] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
-
-const AdresListCard = ({data}) => {
-  
   useEffect(() => {
-    const apiUrl = "https://api.iyziship.com/address/list";
-
-    fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        task: "enable",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log("Bir hata oluştu:", error);
+    const items = JSON.parse(localStorage.getItem("user_information"));
+    if (items) {
+      console.log("here");
+      setToken(items.access_token);
+      console.log("items", myToken);
+    } else {
+      router.push({
+        pathname: "/login",
       });
-
+    }
   }, []);
 
-    
+  useEffect(() => {
+    console.log("token: ", myToken);
+
+    if (myToken.length) {
+      const apiUrl = "https://api.iyziship.com/task/address";
+      fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          task: "enable",
+          task: "enable",
+
+          Authorization: `Bearer ${myToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setList(data?.data);
+          console.log(data?.data);
+        })
+        .catch((error) => {
+          console.log("Bir hata oluştu:", error);
+        });
+    }
+  }, [myToken]);
+
+  const isCopy = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Kopyalandı.',
+    });
+  };
+
   return (
     <BorderedCard>
-      {data?.map((item, index) => (
-        <BoxItems key={index} className={data?.length == index+1 ? 'last-item' : ""}>
-          <BoxTitle>{item?.title}</BoxTitle>
-          <BoxResult className={!item?.canCopy ? 'not-copy' : ""}>{item?.result}</BoxResult>
-          {item.canCopy && <CopyOutlined className="icon-customize-copy" />}
-
+        {contextHolder}
+      {list?.map((item, index) => (
+        <BoxItems
+          key={index}
+          className={list?.length == index + 1 ? "last-item" : ""}
+        >
+          <Item>
+            <BoxTitle>Başlık</BoxTitle>
+            <BoxResult>{item?.address_description}</BoxResult>
+            <div />
+          </Item>
+          <Item>
+            <BoxTitle>Adres</BoxTitle>
+            <BoxResult className="not-copy">{item?.address1}</BoxResult>
+            <CopyToClipboard text={item?.address1}>
+              <CopyOutlined className="icon-customize-copy"  onClick={isCopy} />
+            </CopyToClipboard>
+          </Item>
+          <Item>
+            <BoxTitle>Posta Kodu</BoxTitle>
+            <BoxResult>{item?.postal_code}</BoxResult>
+            <CopyToClipboard text={item?.postal_code}>
+              <CopyOutlined className="icon-customize-copy" onClick={isCopy} />
+            </CopyToClipboard>
+          </Item>
+          <Item>
+            <BoxTitle>Semt</BoxTitle>
+            <BoxResult>{item?.state}</BoxResult>
+            <CopyToClipboard text={item?.state}>
+              <CopyOutlined className="icon-customize-copy" onClick={isCopy} />
+            </CopyToClipboard>
+          </Item>
+          <Item>
+            <BoxTitle>Şehir</BoxTitle>
+            <BoxResult>{item?.city}</BoxResult>
+            <CopyToClipboard text={item?.state}>
+              <CopyOutlined className="icon-customize-copy" onClick={isCopy} />
+            </CopyToClipboard>
+          </Item>
         </BoxItems>
       ))}
     </BorderedCard>
   );
 };
-
 
 export default AdresListCard;
